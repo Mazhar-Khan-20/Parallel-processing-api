@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<flow name="poc-parallelFlow" doc:id="69e22528-589f-4658-8140-ff2a7c71f94a" initialState="stopped">
+		<scheduler doc:name="Scheduler" doc:id="3003f512-c46d-477c-a05d-a36861b540c7" >
+			<scheduling-strategy >
+				<fixed-frequency />
+			</scheduling-strategy>
+		</scheduler>
+		<set-variable value="var1" doc:name="Set Variable" doc:id="e7812f7c-fc4d-4294-8699-5e223e91a442" variableName="var1"/>
+		<set-variable value="var2" doc:name="Set Variable" doc:id="e876cbbd-2bc4-4693-a6e5-61be607bec11" variableName="var2"/>
+		<parallel-foreach doc:name="Parallel For Each" doc:id="f98486ba-6875-4a42-90a8-f056fd812922" collection='#[["a", "b" , "c"]]'>
+			<choice doc:name="Choice" doc:id="4340419b-fda6-4a25-a842-d8325d13acba" >
+				<when expression='#[payload == "a"]'>
+					<set-variable value="Mazhar" doc:name="Set Variable" doc:id="54af3161-02cb-49d9-94d4-6a41ff1dc168" variableName="var2"/>
+					<logger level="INFO" doc:name="Logger" doc:id="f429d9eb-1fd8-4b39-8196-ba4c97f7a589" />
+				</when>
+				<when expression='#[payload == "b"]'>
+					<set-variable value="Shah" doc:name="Set Variable" doc:id="5dc993e3-2689-47fa-a963-f8aa07a3700d" variableName="var3"/>
+					<set-variable value="Zen" doc:name="Set Variable" doc:id="31cbb279-c3dc-4394-9d9b-87c2a570726b" variableName="var2"/>
+					<logger level="INFO" doc:name="Logger" doc:id="ca58a9cb-e7f1-4797-9a43-6c72663bbda7" />
+				</when>
+				<otherwise >
+					<set-variable value="een" doc:name="Set Variable" doc:id="d3396870-cc10-44cc-a6e3-c8e5a5c51a83" variableName="var4"/>
+					<logger level="INFO" doc:name="Logger" doc:id="b0391f27-d24d-445e-bf91-6063e10a4c62" />
+				</otherwise>
+			</choice>
+		</parallel-foreach>
+		<logger level="INFO" doc:name="Logger" doc:id="e00b7732-ec51-4c11-a7bf-5401fca65d2d" />
+	</flow>
+	<flow name="poc-scattergatherFlow" doc:id="10d861f7-9a20-4976-8b28-9755d0e0a04d" >
+		<scheduler doc:name="Scheduler" doc:id="735df656-ac27-4106-bbcc-f0eb151cd747" >
+			<scheduling-strategy >
+				<fixed-frequency />
+			</scheduling-strategy>
+		</scheduler>
+		<set-variable value="var1" doc:name="var1" doc:id="cb77313c-db33-4269-96e3-6f299065baec" variableName="var1" />
+		<set-variable value="var2" doc:name="var2" doc:id="85d8c893-d858-4c6d-b56e-d3784cb91d80" variableName="var2" />
+		<scatter-gather doc:name="Scatter-Gather" doc:id="647bad03-0bcd-48e3-af2c-02f6aabe5bbc" >
+			<route >
+				<set-variable value="Mazhar" doc:name="var2" doc:id="e047284b-391c-403c-a014-fe6cbd2d32e2" variableName="var2" />
+				<logger level="INFO" doc:name="Logger" doc:id="4001a3c9-f6ae-4193-a27a-06d7df7043d6" />
+			</route>
+			<route >
+				<set-variable value="Shah" doc:name="var3" doc:id="4d9358d3-6cd0-4e99-8747-bc37e8771ab3" variableName="var3" />
+				<set-variable value="Zen" doc:name="var2" doc:id="2bec8d0f-7e16-493f-869d-d42bc46aec61" variableName="var2" />
+				<logger level="INFO" doc:name="Logger" doc:id="96648d08-9480-428d-bb53-908902de07ff" />
+			</route>
+			<route >
+				<set-variable value="een" doc:name="var4" doc:id="067de0ec-c5ed-4de8-b1ee-0add99780e21" variableName="var4" />
+				<logger level="INFO" doc:name="Logger" doc:id="0416f1ca-4fd7-44ae-a753-9c51048b5a43" />
+			</route>
+		</scatter-gather>
+		<logger level="INFO" doc:name="Logger" doc:id="f9b9d781-bc3b-46a2-85e8-2d924ee46b25" />
+	</flow>
+</mule>
